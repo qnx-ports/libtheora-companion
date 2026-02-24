@@ -1,0 +1,57 @@
+# Maintainer: Natanael Copa <ncopa@alpinelinux.org>
+# QNX Maintainer: Felix Xing <fxing@qnx.com>
+
+pkgname=libtheora
+pkgver=1.2.0
+pkgrel=0
+pkgdesc="An open video codec developed by the Xiph.org"
+url="https://xiph.org/theora/"
+arch="all"
+license="BSD-3-Clause"
+subpackages="$pkgname-static $pkgname-dev $pkgname-doc"
+depends="libogg"
+depends_dev="libogg-dev"
+makedepends="libvorbis-dev libogg-dev autoconf automake libtool"
+source="https://downloads.xiph.org/releases/theora/libtheora-$pkgver.tar.gz
+    "
+
+prepare() {
+    default_prepare
+
+    libtoolize --force
+    aclocal -I m4
+    autoconf --force
+    automake --force --add-missing
+}
+
+build() {
+    CFLAGS="${CFLAGS} -O2" \
+    CPPFLAGS="${CPPFLAGS} -O2" \
+    ./configure \
+        --build=$CBUILD \
+        --host=$CHOST \
+        --prefix=/usr \
+        --enable-shared \
+        --enable-static
+    make -C lib
+    make
+}
+
+check() {
+    make check
+}
+
+package() {
+    make -j1 DESTDIR="$pkgdir" install
+}
+
+static() {
+    depends=""
+    pkgdesc="$pkgdesc (static libraries)"
+    mkdir -p "$subpkgdir"/usr/lib
+    mv "$pkgdir"/usr/lib/*.a "$subpkgdir"/usr/lib
+}
+
+sha512sums="
+2f64006b645df1bf0d4d8dd3f35bdce4d92bf676f1bc4acc050ea5add1c7363c87548206f089a30898bf551cc447ba0c7a15d10b50061fd8a98902697499a288  libtheora-1.2.0.tar.gz
+"
