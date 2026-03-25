@@ -3,7 +3,7 @@
 
 pkgname=libtheora
 pkgver=1.2.0
-pkgrel=${pkgrel:-0}
+pkgrel=0
 pkgdesc="An open video codec developed by the Xiph.org"
 url="https://xiph.org/theora/"
 arch="all"
@@ -52,7 +52,6 @@ static() {
     mv "$pkgdir"/usr/lib/*.a "$subpkgdir"/usr/lib
 }
 
-options="$options ${DISABLE_CHECK:+!check}"
 sha512sums="
 2f64006b645df1bf0d4d8dd3f35bdce4d92bf676f1bc4acc050ea5add1c7363c87548206f089a30898bf551cc447ba0c7a15d10b50061fd8a98902697499a288  libtheora-1.2.0.tar.gz
 "
